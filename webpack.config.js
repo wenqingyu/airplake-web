@@ -1,54 +1,49 @@
-var path = require('path');
-var webpack = require("webpack");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require("webpack");
+const buildPath = path.resolve(__dirname, 'dist');
+const nodeModulesPath = path.resolve(__dirname, 'node_modules');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-  entry: {
-    vendor: [
-      './node_modules/react/dist/react.js',
-      './node_modules/react-dom/dist/react-dom.js',
-      './node_modules/fastclick/lib/fastclick.js',
-      './node_modules/zepto/dist/zepto.js'
-    ],
-    app: './src/app.js'
+const config = {
+  entry: [
+    'webpack/hot/dev-server',
+    'webpack/hot/only-dev-server',
+    path.join(__dirname, '/src/app.js'),
+  ],
+  devServer: {
+    contentBase: './index.html',
+    devtool: 'eval',
+    hot: true,
+    inline: true,
+    port: 3000,
+    host: 'localhost',
   },
+  devtool: 'eval',
   output: {
-    path: "./dist",
-    filename: "[name].js",
-    chunkFilename: '[name].chunk.js'
+    path: buildPath,
+    filename: "app.[hash],js"
   },
   module: {
     loaders: [
-      {test: /\.js$/, loader: 'babel', include: path.resolve('src')},
-      {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap")},
-      {test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader'},
+      {
+        test: /\.js$/,
+        loaders: ['react-hot', 'babel'],
+        include: path.resolve('src'),
+        exclude: [nodeModulesPath]
+      },
+      {test: /\.(scss|css)$/, loader: 'style!css!sass'},
       {test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=81920'},
-      {test: /\.html$/, loader: "html"},
       {test: /\.json$/, loader: 'json'}
     ]
   },
-  babel: {
-    presets: ['es2015', 'stage-0']
-  },
-  resolve: {
-    root: path.join(__dirname, 'node_modules'),
-    extension: ['', '.js']
-  },
   plugins: [
-    new ExtractTextPlugin('style.css', {allChunks: true, disable: false}),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
-      template: path.resolve('src', 'index.html'),
+      template: path.resolve(__dirname, 'index.html'),
       inject: 'body'
-    }),
-    new webpack.ProvidePlugin({
-      $: 'Zepto'
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
     })
-  ],
-  devtool: 'source-map'
+  ]
 }
+
+module.exports = config;
