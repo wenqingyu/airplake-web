@@ -1,21 +1,21 @@
 {
   "name": "airplake-web",
   "version": "0.0.1",
-  "description": "airplake web build with vue.js and webpack",
+  "description": "airplake web build with react and webpack",
   "main": "index.html",
   "scripts": {
-    "develop": "webpack-dev-server --hot --inline --progress --colors",
+    "dev": "webpack-dev-server --inline --progress --colors",
     "deploy": "webpack --progress --hide-modules"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wenqingyu/airplake-frontend-angular.git"
+    "url": "https://github.com/wenqingyu/airplake-web.git"
   },
   "keywords": [
     "airplake",
-    "vue",
-    "spa",
-    "webpack"
+    "react",
+    "webpack",
+    "es6"
   ],
   "author": {
     "name": "silas",
@@ -25,38 +25,27 @@
   "devDependencies": {
     "babel-core": "^6.1.0",
     "babel-loader": "^6.1.0",
-    "babel-plugin-transform-runtime": "^6.1.0",
     "babel-preset-es2015": "^6.1.0",
-    "babel-runtime": "^6.1.0",
+    "babel-preset-react": "^6.11.0",
     "css-loader": "^0.22.0",
-    "copy-webpack-plugin": "^3.0.0",
     "extract-text-webpack-plugin": "^0.8.0",
     "fastclick": "^1.0.6",
-    "file-loader": "^0.8.4",
-    "font-awesome": "^4.5.0",
     "html-loader": "^0.3.0",
     "html-webpack-plugin": "^1.6.0",
     "json-loader": "^0.5.0",
-    "lodash": "^3.10.0",
     "node-sass": "^3.4.0",
+    "react-hot-loader": "^1.3.0",
     "sass-loader": "^3.0.0",
     "style-loader": "^0.12.0",
     "url-loader": "^0.5.7",
-    "vue-hot-reload-api": "^1.2.0",
-    "vue-html-loader": "^1.0.0",
-    "vue-loader": "^8.1.0",
-    "vue-spinner": "^1.0.0",
-    "vue-style-loader": "^1.0.0",
-    "vue-validator": "^1.4.0",
-    "vuex": "^0.3.0",
     "webpack": "^1.12.0",
     "webpack-dev-server": "^1.12.0",
     "zepto": "^1.2.0"
   },
   "dependencies": {
-    "vue": "^1.0.0",
-    "vue-router": "^0.7.0",
-    "vue-resource": "^0.9.0"
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "material-ui": "^0.15.0"
   },
   "bugs": {
     "url": "https://github.com/wenqingyu/airplake-frontend-angular/issues"

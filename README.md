@@ -1,9 +1,9 @@
-# airplake-frontend-angular
+# airplake-web
 
-## For devlop, Run with the command below
+## For devlop
 
 `make dev`
 
-## For deploy, Run with the commnad below
+## For deploy
 
 `make deploy`
