@@ -11,7 +11,7 @@ const config = {
     path.join(__dirname, '/src/app.js'),
   ],
   devServer: {
-    contentBase: './index.html',
+    contentBase: './src/index.html',
     devtool: 'eval',
     hot: true,
     inline: true,
@@ -21,7 +21,7 @@ const config = {
   devtool: 'eval',
   output: {
     path: buildPath,
-    filename: "app.[hash],js"
+    filename: "app.[hash].js"
   },
   module: {
     loaders: [
@@ -40,7 +40,7 @@ const config = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'index.html'),
+      template: path.resolve(__dirname, 'src/index.html'),
       inject: 'body'
     })
   ]

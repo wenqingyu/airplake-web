@@ -2,7 +2,7 @@
   "name": "airplake-web",
   "version": "0.0.1",
   "description": "Airplake web build with react、material-ui and webpack",
-  "main": "index.html",
+  "main": "./src/index.html",
   "scripts": {
     "dev": "webpack-dev-server --progress --inline --colors",
     "deploy": "webpack --progress --hide-modules --colors"
