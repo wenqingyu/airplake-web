@@ -11,10 +11,16 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Login from './views/login';
+import Provider from './views/provider';
 
 import './assets/scss/base.scss';
-import './assets/scss/layout.scss';
 import './assets/scss/reset.scss';
+
+const styles = {
+  container: {
+    textAlign: 'center'
+  }
+}
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -26,6 +32,8 @@ injectTapEventPlugin();
 
 render(
   <MuiThemeProvider muiTheme={muiTheme}>
-    <Login />
+    <container style={styles.container}>
+      <Provider />
+    </container>
   </MuiThemeProvider>
 , document.getElementById('app'));
