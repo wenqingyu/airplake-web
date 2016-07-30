@@ -24,27 +24,27 @@ const styles = {
 // load citys
 const cityItems = [];
 citys.forEach(cm => {
-  cityItems.push(<MenuItem value={cm.name} key={cm.code} primaryText={`${cm.name}`} />);
+  cityItems.push(<MenuItem value={cm.name} key={cm.code} primaryText={`${cm.name}`}/>);
 });
 
 const rangeItems = [];
 ranges.forEach(r => {
-  rangeItems.push(<MenuItem value={r.key} primaryText={`${r.val}`} />)
+  rangeItems.push(<MenuItem value={r.val} key={r.key} primaryText={`${r.val}`}/>)
 })
 
 const uavItems = [];
 uavs.forEach(u => {
-  uavItems.push(<MenuItem value={u.key} primaryText={u.val} />)
+  uavItems.push(<MenuItem value={u.val} key={u.key} primaryText={`${u.val}`}/>)
 })
 
 const cameraItems = [];
 cameras.forEach(c => {
-  cameraItems.push(<MenuItem value={c.key} primaryText={c.val} />)
+  cameraItems.push(<MenuItem value={c.val} key={c.key} primaryText={`${c.val}`}/>)
 })
 
 const serviceItems = [];
-services.forEach(c => {
-  serviceItems.push(<MenuItem value={c.key} primaryText={c.val} />)
+services.forEach(s => {
+  serviceItems.push(<MenuItem value={s.val} key={s.key} primaryText={s.val}/>)
 })
 
 class Provider extends Component {
@@ -69,8 +69,6 @@ class Provider extends Component {
 
     this.submit = this.submit.bind(this);
 
-    this.team = '';
-
     // default values
     this.state = {
       team: '',
@@ -88,7 +86,6 @@ class Provider extends Component {
       othersChk: false
     };
   }
-
 
   // set team
   teamChange(event) {
@@ -126,35 +123,35 @@ class Provider extends Component {
   }
 
   // city select
-  citySelect(event, index, value){
+  citySelect(event, index, value) {
     this.setState({
       city: value
     });
   }
 
   // range select
-  rangeSelect(event, index, value){
+  rangeSelect(event, index, value) {
     this.setState({
       range: value
     });
   }
 
   // uav select
-  uavSelect(event, index, value){
+  uavSelect(event, index, value) {
     this.setState({
       uav: value
     });
   }
 
   // camera select
-  cameraSelect(event, index, value){
+  cameraSelect(event, index, value) {
     this.setState({
       camera: value
     });
   }
 
   // service select
-  serviceSelect(event, index, value){
+  serviceSelect(event, index, value) {
     this.setState({
       service: value
     });
@@ -162,23 +159,14 @@ class Provider extends Component {
 
   // uav check
   uavCheck(event, isInputChecked) {
-    this.setState({
-      navChk: isInputChecked
-    })
   }
 
   // camera check
   cameraCheck(event, isInputChecked) {
-    this.setState({
-      cameraChk: isInputChecked
-    })
   }
 
   // others check
   othersCheck(event, isInputChecked) {
-    this.setState({
-      othersChk: isInputChecked
-    })
   }
 
   submit() {
@@ -225,7 +213,7 @@ class Provider extends Component {
               value={this.state.city}
               onChange={this.citySelect}
               floatingLabelText="服务范围"
-            >
+              >
               {cityItems}
             </SelectField>
           </div>
@@ -245,37 +233,34 @@ class Provider extends Component {
               checkedIcon={<ActionFavorite />}
               uncheckedIcon={<ActionFavoriteBorder />}
               label="无人机"
-              //checked={this.state.uavChk}
               onCheck={this.uavCheck}
-            />
+              />
             <SelectField
               maxHeight={200}
               value={this.state.uav}
               onChange={this.uavSelect}
-            >
+              >
               {uavItems}
             </SelectField>
             <CheckBox
               checkedIcon={<ActionFavorite />}
               uncheckedIcon={<ActionFavoriteBorder />}
               label="相机"
-              //checked={this.state.cameraChk}
               onCheck={this.cameraCheck}
-            />
+              />
             <SelectField
               maxHeight={200}
               value={this.state.camera}
               onChange={this.cameraSelect}
-            >
+              >
               {cameraItems}
             </SelectField>
             <CheckBox
               checkedIcon={<ActionFavorite />}
               uncheckedIcon={<ActionFavoriteBorder />}
               label="其他"
-              //checked={this.state.cameraChk}
               onCheck={this.othersCheck}
-            />
+              />
           </div>
           <div>
             <SelectField

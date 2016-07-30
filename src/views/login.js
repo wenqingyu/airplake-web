@@ -2,6 +2,7 @@
  * Created by tww316 on 16/7/26.
  */
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router'
 import request from 'superagent';
 
 import TextField from 'material-ui/TextField';
@@ -58,6 +59,8 @@ class Login extends Component {
     var username = this.state.username,
       password = this.state.password;
 
+    browserHistory.push('/provider');
+
     request
       .post('/webapi/login')
       .send({
@@ -65,21 +68,23 @@ class Login extends Component {
         password: password
       })
       .end((err, res) => {
-        if(res.code == 200) {
+        if (res.code == 200) {
           console.log('success');
         }
       })
   }
 
   // register submit
-  register() {
-    // go to register
+  register(event) {
+    event.preventDefault();
+    browserHistory.push('/register');
   }
 
   render() {
     return (
       <section style={styles.login}>
         <h1 style={styles.h1}>Welcome!</h1>
+
         <div>
           <TextField
             value={this.state.username}
