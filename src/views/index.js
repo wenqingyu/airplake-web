@@ -25,6 +25,7 @@ class Index extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <container style={styles.container}>
+          {this.props.children}
         </container>
       </MuiThemeProvider>
     );

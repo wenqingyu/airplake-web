@@ -67,9 +67,8 @@ class Provider extends Component {
     this.cameraCheck = this.cameraCheck.bind(this);
     this.othersCheck = this.othersCheck.bind(this);
 
-    this.submit = this.submit.bind(this);
+    this.publish = this.publish.bind(this);
 
-    // default values
     this.state = {
       team: '',
       mobile: '',
@@ -169,8 +168,15 @@ class Provider extends Component {
   othersCheck(event, isInputChecked) {
   }
 
-  submit() {
-    alert('握草，你提交的东西可真多！');
+  publish() {
+    var team = this.state.team,
+      mobile = this.state.mobile,
+      wechat = this.state.wechat,
+      email = this.state.email,
+      city = this.state.city,
+      range = this.state.range,
+      mobile = this.state.mobile,
+      mobile = this.state.mobile;
   }
 
   render() {
@@ -204,7 +210,7 @@ class Provider extends Component {
               id="email"
               value={this.state.email}
               onChange={this.emailChange}
-              floatingLabelText="邮箱地址"
+              floatingLabelText="邮箱"
               />
           </div>
           <div>
@@ -284,9 +290,9 @@ class Provider extends Component {
           </div>
           <div style={styles.btn_wrapper}>
             <RaisedButton
-              label="提交"
+              label="发布"
               primary={true}
-              onTouchTap={this.submit}
+              onTouchTap={this.publish}
               />
           </div>
         </form>

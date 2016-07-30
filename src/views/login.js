@@ -28,7 +28,6 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
-    // func bind
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
     this.login = this.login.bind(this);
@@ -69,7 +68,11 @@ class Login extends Component {
       })
       .end((err, res) => {
         if (res.code == 200) {
-          console.log('success');
+          if (res.data.type == 1) {
+            browserHistory.push('/provider');
+          } else {
+            browserHistory.push('/demand');
+          }
         }
       })
   }
