@@ -31,9 +31,7 @@ const config = {
         include: path.resolve('src'),
         exclude: [nodeModulesPath]
       },
-      {test: /\.(scss|css)$/, loader: 'style!css!sass'},
-      {test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=81920'},
-      {test: /\.json$/, loader: 'json'}
+      {test: /\.(css)$/, loader: 'style!css'}
     ]
   },
   plugins: [

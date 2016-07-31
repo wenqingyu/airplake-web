@@ -189,7 +189,7 @@ class Provider extends Component {
     var token = this.props.location.query.token;
 
     request
-      .post(config.api + '/api/v1/users/' + token)
+      .put(config.api + '/api/v1/users/' + token)
       .set('Content-Type', 'application/json')
       .send({vendor: params})
       .end((err, res) => {

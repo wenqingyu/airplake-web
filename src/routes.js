@@ -15,8 +15,7 @@ import Login from './views/login';
 import Provider from './views/provider';
 import Register from './views/register';
 
-import './assets/scss/base.scss';
-import './assets/scss/reset.scss';
+import './assets/style/reset.css';
 
 const styles = {
   container: {

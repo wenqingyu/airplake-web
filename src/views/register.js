@@ -86,7 +86,7 @@ class Register extends Component {
     }
 
     request
-      .put(config.api + '/api/v1/users/verification')
+      .post(config.api + '/api/v1/users/verification')
       .set('Content-Type', 'application/json')
       .send(params)
       .end((err, res) => {
