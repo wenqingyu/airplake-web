@@ -9,9 +9,12 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import CheckBox from 'material-ui/Checkbox';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 
+import config from '../const/config';
 import citys from '../const/citys';
 import {ranges, uavs, cameras, services} from '../const/provider';
 
@@ -55,7 +58,7 @@ class Provider extends Component {
     this.mobileChange = this.mobileChange.bind(this);
     this.wechatChange = this.wechatChange.bind(this);
     this.emailChange = this.emailChange.bind(this);
-    this.describeChange = this.describeChange.bind(this);
+    this.descriptionChange = this.descriptionChange.bind(this);
 
     this.citySelect = this.citySelect.bind(this);
     this.rangeSelect = this.rangeSelect.bind(this);
@@ -75,14 +78,12 @@ class Provider extends Component {
       wechat: '',
       email: '',
       city: '004',
-      describe: '',
+      description: '',
       range: 0,
       uav: 0,
       camera: 0,
       service: 0,
-      uavChk: false,
-      cameraChk: false,
-      othersChk: false
+      dialogOpen: false
     };
   }
 
@@ -114,10 +115,10 @@ class Provider extends Component {
     })
   }
 
-  // set describe
-  describeChange(event) {
+  // set description
+  descriptionChange(event) {
     this.setState({
-      describe: event.target.value
+      description: event.target.value
     })
   }
 
@@ -168,134 +169,177 @@ class Provider extends Component {
   othersCheck(event, isInputChecked) {
   }
 
+  // publish submit
   publish() {
-    var team = this.state.team,
-      mobile = this.state.mobile,
-      wechat = this.state.wechat,
-      email = this.state.email,
-      city = this.state.city,
-      range = this.state.range,
-      mobile = this.state.mobile,
-      mobile = this.state.mobile;
+    var params = {
+      team: this.state.team,
+      tel: this.state.mobile,
+      wechant: this.state.wechat,
+      email: this.state.email,
+      city: this.state.city,
+      servicetime: this.state.range,
+      equipment: [
+        {type: '无人机', model: this.state.uav},
+        {type: '相机', model: this.state.camera},
+      ],
+      servicetype: this.state.service,
+      des: this.state.describe
+    };
+
+    var token = this.props.location.query.token;
+
+    request
+      .post(config.api + '/api/v1/users/' + token)
+      .set('Content-Type', 'application/json')
+      .send({vendor: params})
+      .end((err, res) => {
+        if (res.code == 200) {
+          this.setState({
+            dialogOpen: true
+          });
+        }
+      })
+  }
+
+  // dialog close
+  closeDialog() {
+    this.setState({
+      dialogOpen: false
+    });
   }
 
   render() {
+    const closeDialogAction = (
+      <FlatButton
+        label="好的"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.closeDialog}
+        />
+    );
+
     return (
       <section className="provider">
-        <form>
-          <div>
-            <TextField
-              value={this.state.team}
-              onChange={this.teamChange}
-              floatingLabelText="团队名称"
-              />
-          </div>
-          <div>
-            <TextField
-              value={this.state.mobile}
-              onChange={this.mobileChange}
-              floatingLabelText="手机号"
-              />
-          </div>
-          <div>
-            <TextField
-              id="wechat"
-              value={this.state.wechat}
-              onChange={this.wechatChange}
-              floatingLabelText="微信号"
-              />
-          </div>
-          <div>
-            <TextField
-              id="email"
-              value={this.state.email}
-              onChange={this.emailChange}
-              floatingLabelText="邮箱"
-              />
-          </div>
-          <div>
-            <SelectField
-              maxHeight={200}
-              value={this.state.city}
-              onChange={this.citySelect}
-              floatingLabelText="服务范围"
-              >
-              {cityItems}
-            </SelectField>
-          </div>
-          <div>
-            <SelectField
-              maxHeight={200}
-              value={this.state.range}
-              onChange={this.rangeSelect}
-              floatingLabelText="服务时间"
-              >
-              {rangeItems}
-            </SelectField>
-          </div>
-          <div>
-            <h2>器材类型</h2>
-            <CheckBox
-              checkedIcon={<ActionFavorite />}
-              uncheckedIcon={<ActionFavoriteBorder />}
-              label="无人机"
-              onCheck={this.uavCheck}
-              />
-            <SelectField
-              maxHeight={200}
-              value={this.state.uav}
-              onChange={this.uavSelect}
-              >
-              {uavItems}
-            </SelectField>
-            <CheckBox
-              checkedIcon={<ActionFavorite />}
-              uncheckedIcon={<ActionFavoriteBorder />}
-              label="相机"
-              onCheck={this.cameraCheck}
-              />
-            <SelectField
-              maxHeight={200}
-              value={this.state.camera}
-              onChange={this.cameraSelect}
-              >
-              {cameraItems}
-            </SelectField>
-            <CheckBox
-              checkedIcon={<ActionFavorite />}
-              uncheckedIcon={<ActionFavoriteBorder />}
-              label="其他"
-              onCheck={this.othersCheck}
-              />
-          </div>
-          <div>
-            <SelectField
-              maxHeight={200}
-              value={this.state.service}
-              onChange={this.serviceSelect}
-              floatingLabelText="服务内容"
-              >
-              {serviceItems}
-            </SelectField>
-          </div>
-          <div>
-            <TextField
-              value={this.state.describe}
-              onChange={this.describeChange}
-              multiLine={true}
-              rows={3}
-              rowsMax={5}
-              floatingLabelText="团队描述"
-              />
-          </div>
-          <div style={styles.btn_wrapper}>
-            <RaisedButton
-              label="发布"
-              primary={true}
-              onTouchTap={this.publish}
-              />
-          </div>
-        </form>
+        <Dialog
+          open={this.state.dialogOpen}
+          actions={closeDialogAction}
+          onRequestClose={this.closeDialog}
+          >
+          服务发布成功
+        </Dialog>
+
+        <div>
+          <TextField
+            value={this.state.team}
+            onChange={this.teamChange}
+            floatingLabelText="团队名称"
+            />
+        </div>
+        <div>
+          <TextField
+            value={this.state.mobile}
+            onChange={this.mobileChange}
+            floatingLabelText="手机号"
+            />
+        </div>
+        <div>
+          <TextField
+            id="wechat"
+            value={this.state.wechat}
+            onChange={this.wechatChange}
+            floatingLabelText="微信号"
+            />
+        </div>
+        <div>
+          <TextField
+            id="email"
+            value={this.state.email}
+            onChange={this.emailChange}
+            floatingLabelText="邮箱"
+            />
+        </div>
+        <div>
+          <SelectField
+            maxHeight={200}
+            value={this.state.city}
+            onChange={this.citySelect}
+            floatingLabelText="服务范围"
+            >
+            {cityItems}
+          </SelectField>
+        </div>
+        <div>
+          <SelectField
+            maxHeight={200}
+            value={this.state.range}
+            onChange={this.rangeSelect}
+            floatingLabelText="服务时间"
+            >
+            {rangeItems}
+          </SelectField>
+        </div>
+        <div>
+          <h2>器材类型</h2>
+          <CheckBox
+            checkedIcon={<ActionFavorite />}
+            uncheckedIcon={<ActionFavoriteBorder />}
+            label="无人机"
+            onCheck={this.uavCheck}
+            />
+          <SelectField
+            maxHeight={200}
+            value={this.state.uav}
+            onChange={this.uavSelect}
+            >
+            {uavItems}
+          </SelectField>
+          <CheckBox
+            checkedIcon={<ActionFavorite />}
+            uncheckedIcon={<ActionFavoriteBorder />}
+            label="相机"
+            onCheck={this.cameraCheck}
+            />
+          <SelectField
+            maxHeight={200}
+            value={this.state.camera}
+            onChange={this.cameraSelect}
+            >
+            {cameraItems}
+          </SelectField>
+          <CheckBox
+            checkedIcon={<ActionFavorite />}
+            uncheckedIcon={<ActionFavoriteBorder />}
+            label="其他"
+            onCheck={this.othersCheck}
+            />
+        </div>
+        <div>
+          <SelectField
+            maxHeight={200}
+            value={this.state.service}
+            onChange={this.serviceSelect}
+            floatingLabelText="服务内容"
+            >
+            {serviceItems}
+          </SelectField>
+        </div>
+        <div>
+          <TextField
+            value={this.state.description}
+            onChange={this.descriptionChange}
+            multiLine={true}
+            rows={3}
+            rowsMax={5}
+            floatingLabelText="团队描述"
+            />
+        </div>
+        <div style={styles.btn_wrapper}>
+          <RaisedButton
+            label="发布"
+            primary={true}
+            onTouchTap={this.publish}
+            />
+        </div>
       </section>
     );
   }

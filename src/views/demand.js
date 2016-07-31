@@ -4,20 +4,22 @@
 import React, { Component } from 'react';
 import request from 'superagent';
 
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import DatePicker from 'material-ui/DatePicker';
 
-const userTypes = [
-  {key: 0, val: '服务商注册'},
-  {key: 1, val: '用户注册'}
-]
+import config from '../const/config';
+import citys from '../const/citys';
 
-const typeItems = [];
-userTypes.forEach(ut => {
-  typeItems.push(<MenuItem key={ut.key} primaryText={`${ut.val}`}/>);
-})
+// load citys
+const cityItems = [];
+citys.forEach(cm => {
+  cityItems.push(<MenuItem value={cm.name} key={cm.code} primaryText={`${cm.name}`}/>);
+});
 
 const styles = {
   register: {
@@ -30,8 +32,8 @@ const styles = {
 
 class Demand extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     // func bind
     this.emailChange = this.emailChange.bind(this);
@@ -40,8 +42,8 @@ class Demand extends Component {
 
     // default value
     this.state = {
-      userType: 1,
-      email: ''
+      startDate: null,
+      endDate: null,
     }
   }
 
@@ -58,6 +60,19 @@ class Demand extends Component {
       userType: value
     })
   }
+
+  startDateChange(event, date) {
+    this.setState({
+      startDate: date
+    });
+  }
+
+  endDateChange(event, date) {
+    this.setState({
+      endDate: date
+    });
+  }
+
 
   // register submit
   register() {
@@ -83,29 +98,60 @@ class Demand extends Component {
   render() {
     return (
       <section style={styles.register}>
-        <h1 style={styles.h1}>Welcome!</h1>
+        <h1 style={styles.h1}>无人机需求发布</h1>
 
         <div>
           <TextField
-            value={this.state.email}
-            onChange={this.emailChange}
-            floatingLabelText="邮箱"
+            value={this.state.title}
+            onChange={this.titleChange}
+            floatingLabelText="服务标题"
+            />
+        </div>
+        <div>
+          <TextField
+            value={this.state.description}
+            onChange={this.descriptionChange}
+            floatingLabelText="服务描述"
             />
         </div>
         <div>
           <SelectField
-            value={this.state.userType}
-            onChange={this.userTypeSelect}
-            floatingLabelText="用户类型"
+            maxHeight={200}
+            value={this.state.city}
+            onChange={this.citySelect}
+            floatingLabelText="服务范围"
             >
-            {typeItems}
+            {cityItems}
           </SelectField>
+        </div>
+        <div>
+          <TextField
+            value={this.state.serviceType}
+            onChange={this.serviceTypeChange}
+            floatingLabelText="服务类型"
+            />
         </div>
         <div>
           <RaisedButton
             label="注册"
             primary={true}
             onTouchTap={this.register}
+            />
+        </div>
+        <div>
+          <DatePicker
+            floatingLabelText="服务开始时间"
+            autoOk={true}
+            value={this.state.startDate}
+            onChange={this.startDateChange}
+            />
+        </div>
+        <div>
+          <DatePicker
+            floatingLabelText="服务结束时间"
+            autoOk={true}
+            value={this.state.endDate}
+            onChange={this.endDateChange}
             />
         </div>
       </section>

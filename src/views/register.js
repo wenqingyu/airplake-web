@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router'
 import request from 'superagent';
-import $ from 'jQuery';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -81,16 +80,15 @@ class Register extends Component {
 
   // register submit
   register() {
-    var email = this.state.email,
-      userType = this.state.userType;
+    var params = {
+      email: this.state.email,
+      type: this.state.userType
+    }
 
     request
-      .post(config.api + '/api/v1/users/verification')
+      .put(config.api + '/api/v1/users/verification')
       .set('Content-Type', 'application/json')
-      .send({
-        "email": email,
-        "type": userType
-      })
+      .send(params)
       .end((err, res) => {
         if (res.code == 200) {
           this.setState({
