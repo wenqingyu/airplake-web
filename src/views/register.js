@@ -7,22 +7,10 @@ import request from 'superagent';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 import config from '../const/config';
-
-const userTypes = [
-  {key: 0, val: '服务商'},
-  {key: 1, val: '用户'}
-]
-
-const typeItems = [];
-userTypes.forEach(ut => {
-  typeItems.push(<MenuItem value={ut.key} key={ut.val} primaryText={`${ut.val}`}/>);
-})
 
 const styles = {
   register: {
@@ -44,45 +32,30 @@ class Register extends Component {
   constructor(props, context) {
     super(props, context);
 
-    // func bind
     this.emailChange = this.emailChange.bind(this);
-    this.userTypeSelect = this.userTypeSelect.bind(this);
     this.register = this.register.bind(this);
     this.backLogin = this.backLogin.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
 
-    // default value
     this.state = {
-      userType: 1,
       email: '',
       dialogOpen: false
     }
   }
 
-  // set email
   emailChange(event) {
     this.setState({
       email: event.target.value
     })
   }
 
-  // select userType
-  userTypeSelect(event, index, value) {
-    this.setState({
-      userType: value
-    })
-  }
-
-  // back to login
   backLogin() {
     browserHistory.push('/login');
   }
 
-  // register submit
   register() {
     var params = {
-      email: this.state.email,
-      type: this.state.userType
+      email: this.state.email
     }
 
     request
@@ -90,6 +63,7 @@ class Register extends Component {
       .set('Content-Type', 'application/json')
       .send(params)
       .end((err, res) => {
+        console.log(res);
         if (res.code == 200) {
           this.setState({
             dialogOpen: true
@@ -98,7 +72,6 @@ class Register extends Component {
       });
   }
 
-  // dialog close
   closeDialog() {
     this.setState({
       dialogOpen: false
@@ -134,24 +107,16 @@ class Register extends Component {
             floatingLabelText="邮箱"
             />
         </div>
-        <div>
-          <SelectField
-            value={this.state.userType}
-            onChange={this.userTypeSelect}
-            floatingLabelText="请选择您的角色类型"
-            >
-            {typeItems}
-          </SelectField>
-        </div>
         <div style={styles.btn_wrapper}>
           <RaisedButton
             label="注册"
             style={styles.btn}
-            primary={true}
+            secondary={true}
             onTouchTap={this.register}
             />
           <RaisedButton
             label="返回登录"
+            //href="/login"
             onTouchTap={this.backLogin}
             />
         </div>

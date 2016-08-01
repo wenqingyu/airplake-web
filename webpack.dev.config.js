@@ -12,10 +12,7 @@ const config = {
   devtool: 'source-map',
   output: {filename: 'app.js'},
   module: {
-    loaders: [
-      {test: /\.js$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/},
-      {test: /\.(css)$/, loader: 'style!css'}
-    ]
+    loaders: [{test: /\.js$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/}]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

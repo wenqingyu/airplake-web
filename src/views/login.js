@@ -8,6 +8,8 @@ import request from 'superagent';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import config from '../const/config';
+
 const styles = {
   login: {
     marginTop: '10rem'
@@ -25,8 +27,8 @@ const styles = {
 
 class Login extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
@@ -39,34 +41,31 @@ class Login extends Component {
     }
   }
 
-  // set username
   usernameChange(event) {
     this.setState({
       username: event.target.value
     })
   }
 
-  // set password
   passwordChange(event) {
     this.setState({
       password: event.target.value
     })
   }
 
-  // login submit
   login() {
-    var username = this.state.username,
-      password = this.state.password;
-
-    browserHistory.push('/provider');
+    var params = {
+      username: this.state.username,
+      password: this.state.password
+    }
 
     request
-      .post('/webapi/login')
-      .send({
-        username: username,
-        password: password
-      })
+      .post(config.api + '/api/v1/users/login')
+      .set('Content-Type', 'application/json')
+      .send(params)
       .end((err, res) => {
+        console.log(err);
+        console.log(res);
         if (res.code == 200) {
           if (res.data.type == 1) {
             browserHistory.push('/provider');
@@ -77,7 +76,6 @@ class Login extends Component {
       })
   }
 
-  // register submit
   register(event) {
     event.preventDefault();
     browserHistory.push('/register');
@@ -107,7 +105,7 @@ class Login extends Component {
           <RaisedButton
             label="登录"
             style={styles.btn}
-            primary={true}
+            secondary={true}
             onTouchTap={this.login}
             />
           <RaisedButton
@@ -116,7 +114,7 @@ class Login extends Component {
             />
         </div>
       </section>
-    );
+    )
   }
 }
 
