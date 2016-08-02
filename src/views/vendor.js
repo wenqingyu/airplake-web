@@ -14,17 +14,11 @@ import FlatButton from 'material-ui/FlatButton';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 
-import config from '../const/config';
-import citys from '../const/citys';
-import {ranges, uavs, cameras, services} from '../const/provider';
+import config from '../consts/config';
+import baseStyle from '../assets/styles/base';
+import citys from '../consts/city';
+import {ranges, uavs, cameras, services} from '../consts/provider';
 
-const styles = {
-  btn_wrapper: {
-    marginTop: '1rem'
-  }
-}
-
-// load citys
 const cityItems = [];
 citys.forEach(cm => {
   cityItems.push(<MenuItem value={cm.name} key={cm.code} primaryText={`${cm.name}`}/>);
@@ -50,7 +44,7 @@ services.forEach(s => {
   serviceItems.push(<MenuItem value={s.val} key={s.key} primaryText={s.val}/>)
 })
 
-class Provider extends Component {
+class Vendor extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -70,7 +64,7 @@ class Provider extends Component {
     this.cameraCheck = this.cameraCheck.bind(this);
     this.othersCheck = this.othersCheck.bind(this);
 
-    this.publish = this.publish.bind(this);
+    this.submit = this.submit.bind(this);
 
     this.state = {
       team: '',
@@ -82,95 +76,80 @@ class Provider extends Component {
       range: 0,
       uav: 0,
       camera: 0,
-      service: 0,
-      dialogOpen: false
+      service: 0
     };
   }
 
-  // set team
   teamChange(event) {
     this.setState({
       team: event.target.value
     })
   }
 
-  // set mobile
   mobileChange(event) {
     this.setState({
       mobile: event.target.value
     })
   }
 
-  // set wechat
   wechatChange(event) {
     this.setState({
       wechat: event.target.value
     })
   }
 
-  // set email
   emailChange(event) {
     this.setState({
       email: event.target.value
     })
   }
 
-  // set description
   descriptionChange(event) {
     this.setState({
       description: event.target.value
     })
   }
 
-  // city select
   citySelect(event, index, value) {
     this.setState({
       city: value
     });
   }
 
-  // range select
   rangeSelect(event, index, value) {
     this.setState({
       range: value
     });
   }
 
-  // uav select
   uavSelect(event, index, value) {
     this.setState({
       uav: value
     });
   }
 
-  // camera select
   cameraSelect(event, index, value) {
     this.setState({
       camera: value
     });
   }
 
-  // service select
   serviceSelect(event, index, value) {
     this.setState({
       service: value
     });
   }
 
-  // uav check
   uavCheck(event, isInputChecked) {
   }
 
-  // camera check
   cameraCheck(event, isInputChecked) {
   }
 
-  // others check
   othersCheck(event, isInputChecked) {
   }
 
-  // publish submit
-  publish() {
+  submit() {
     var params = {
       team: this.state.team,
       tel: this.state.mobile,
@@ -201,33 +180,9 @@ class Provider extends Component {
       })
   }
 
-  // dialog close
-  closeDialog() {
-    this.setState({
-      dialogOpen: false
-    });
-  }
-
   render() {
-    const closeDialogAction = (
-      <FlatButton
-        label="好的"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={this.closeDialog}
-        />
-    );
-
     return (
       <section className="provider">
-        <Dialog
-          open={this.state.dialogOpen}
-          actions={closeDialogAction}
-          onRequestClose={this.closeDialog}
-          >
-          服务发布成功
-        </Dialog>
-
         <div>
           <TextField
             value={this.state.team}
@@ -335,9 +290,9 @@ class Provider extends Component {
         </div>
         <div style={styles.btn_wrapper}>
           <RaisedButton
-            label="发布"
-            primary={true}
-            onTouchTap={this.publish}
+            label="提交"
+            secondary={true}
+            onTouchTap={this.submit}
             />
         </div>
       </section>
@@ -345,4 +300,4 @@ class Provider extends Component {
   }
 }
 
-export default Provider;
+export default Vendor;

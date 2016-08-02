@@ -8,22 +8,9 @@ import request from 'superagent';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import config from '../const/config';
-
-const styles = {
-  login: {
-    marginTop: '10rem'
-  },
-  h1: {
-    fontSize: '2rem'
-  },
-  btn_wrapper: {
-    marginTop: '1rem'
-  },
-  btn: {
-    marginRight: '2rem'
-  }
-}
+import baseStyle from '../assets/styles/base';
+import config from '../consts/config';
+import storage from '../utils/storage';
 
 class Login extends Component {
 
@@ -37,7 +24,7 @@ class Login extends Component {
 
     this.state = {
       username: '',
-      password: ''
+      password: '',
     }
   }
 
@@ -55,42 +42,73 @@ class Login extends Component {
 
   login() {
     var params = {
-      username: this.state.username,
+      name: this.state.username,
       password: this.state.password
     }
 
     request
       .post(config.api + '/api/v1/users/login')
-      .set('Content-Type', 'application/json')
+      .type('json')
       .send(params)
-      .end((err, res) => {
-        console.log(err);
-        console.log(res);
-        if (res.code == 200) {
-          if (res.data.type == 1) {
-            browserHistory.push('/provider');
+      .then((res) => {
+        if (res.status == 200) {
+          storage.set('token', res.header['token']);
+          var ret = res.body;
+          if (ret.code == 200) {
+            this.setState({
+              snackBar: {
+                open: true,
+                message: '登录成功'
+              }
+            });
+            if (ret.data.type == 1) {
+              browserHistory.push('vendor');
+            } else if (ret.data.type == 2) {
+              browserHistory.push('demand');
+            } else {
+              this.setState({
+                snackBar: {
+                  open: true,
+                  message: '你究竟是谁？...'
+                }
+              });
+            }
           } else {
-            browserHistory.push('/demand');
+            this.setState({
+              snackBar: {
+                open: true,
+                message: ret.error_msg
+              }
+            });
           }
         }
+      }, (err) => {
+        this.setState({
+          snackBar: {
+            open: true,
+            message: '你的网络似乎不太好...'
+          }
+        });
       })
   }
 
   register(event) {
     event.preventDefault();
-    browserHistory.push('/register');
+    browserHistory.push('register');
   }
 
   render() {
     return (
-      <section style={styles.login}>
-        <h1 style={styles.h1}>Welcome!</h1>
+      <section style={baseStyle.wrapper}>
+        <h1 style={baseStyle.title}>Welcome!</h1>
 
         <div>
           <TextField
             value={this.state.username}
             onChange={this.usernameChange}
             floatingLabelText="用户名"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -99,17 +117,20 @@ class Login extends Component {
             onChange={this.passwordChange}
             type="password"
             floatingLabelText="密码"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
-        <div style={styles.btn_wrapper}>
+        <div style={baseStyle.btnWrapper}>
           <RaisedButton
             label="登录"
-            style={styles.btn}
+            style={baseStyle.btn}
             secondary={true}
             onTouchTap={this.login}
             />
           <RaisedButton
             label="注册"
+            labelStyle={baseStyle.baseColor}
             onTouchTap={this.register}
             />
         </div>

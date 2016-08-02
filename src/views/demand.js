@@ -8,56 +8,67 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
 
-import config from '../const/config';
-import citys from '../const/citys';
+import baseStyle from '../assets/styles/base';
+import config from '../consts/config';
+import citys from '../consts/city';
 
-// load citys
 const cityItems = [];
 citys.forEach(cm => {
   cityItems.push(<MenuItem value={cm.name} key={cm.code} primaryText={`${cm.name}`}/>);
 });
-
-const styles = {
-  register: {
-    marginTop: '10rem'
-  },
-  h1: {
-    fontSize: '2rem'
-  }
-}
 
 class Demand extends Component {
 
   constructor(props, context) {
     super(props, context);
 
-    // func bind
-    this.emailChange = this.emailChange.bind(this);
-    this.userTypeSelect = this.userTypeSelect.bind(this);
-    this.register = this.register.bind(this);
+    this.titleChange = this.titleChange.bind(this);
+    this.descriptionChange = this.descriptionChange.bind(this);
+    this.citySelect = this.citySelect.bind(this);
+    this.serviceTypeChange = this.serviceTypeChange.bind(this);
+    this.startDateChange = this.startDateChange.bind(this);
+    this.endDateChange = this.endDateChange.bind(this);
+    this.minBudgetChange = this.minBudgetChange.bind(this);
+    this.maxBudgetChange = this.maxBudgetChange.bind(this);
+    this.locationChange = this.locationChange.bind(this);
+    this.create = this.create.bind(this);
 
-    // default value
     this.state = {
+      title: '',
+      description: '',
+      city: '004',
+      serviceType: '',
       startDate: null,
       endDate: null,
+      minBudget: '',
+      maxBudget: '',
+      location: ''
     }
   }
 
-  // set email
-  emailChange(event) {
+  titleChange(event) {
     this.setState({
       email: event.target.value
     })
   }
 
-  // select userType
-  userTypeSelect(event, index, value) {
+  descriptionChange(event) {
     this.setState({
-      userType: value
+      description: event.target.value
+    })
+  }
+
+  citySelect(event, index, value) {
+    this.setState({
+      city: value
+    });
+  }
+
+  serviceTypeChange(event) {
+    this.setState({
+      serviceType: event.target.value
     })
   }
 
@@ -73,14 +84,36 @@ class Demand extends Component {
     });
   }
 
+  minBudgetChange(event) {
+    this.setState({
+      minBudget: event.target.value
+    });
+  }
 
-  // register submit
-  register() {
-    var email = this.state.email,
-      userType = this.state.userType;
+  maxBudgetChange(event) {
+    this.setState({
+      maxBudget: event.target.value
+    });
+  }
 
-    console.log(email);
-    console.log(userType);
+  locationChange(event) {
+    this.setState({
+      location: event.target.value
+    });
+  }
+
+  create() {
+    var params = {
+      title: this.state.title,
+      des: this.state.description,
+      city: this.state.city,
+      servicetype: this.state.serviceType,
+      starttime: this.state.startDate,
+      endtime: this.state.endDate,
+      min: this.state.minBudget,
+      max: this.state.maxBudget,
+      location: this.state.location
+    };
 
     request
       .post('/api/v1/users/verification')
@@ -97,8 +130,8 @@ class Demand extends Component {
 
   render() {
     return (
-      <section style={styles.register}>
-        <h1 style={styles.h1}>无人机需求发布</h1>
+      <section>
+        <h1 style={baseStyle.title}>无人机需求发布</h1>
 
         <div>
           <TextField
@@ -111,6 +144,9 @@ class Demand extends Component {
           <TextField
             value={this.state.description}
             onChange={this.descriptionChange}
+            multiLine={true}
+            rows={3}
+            rowsMax={5}
             floatingLabelText="服务描述"
             />
         </div>
@@ -119,7 +155,7 @@ class Demand extends Component {
             maxHeight={200}
             value={this.state.city}
             onChange={this.citySelect}
-            floatingLabelText="服务范围"
+            floatingLabelText="服务城市"
             >
             {cityItems}
           </SelectField>
@@ -129,13 +165,6 @@ class Demand extends Component {
             value={this.state.serviceType}
             onChange={this.serviceTypeChange}
             floatingLabelText="服务类型"
-            />
-        </div>
-        <div>
-          <RaisedButton
-            label="注册"
-            primary={true}
-            onTouchTap={this.register}
             />
         </div>
         <div>
@@ -152,6 +181,37 @@ class Demand extends Component {
             autoOk={true}
             value={this.state.endDate}
             onChange={this.endDateChange}
+            />
+        </div>
+        <div>
+          <TextField
+            value={this.state.minBudget}
+            onChange={this.minBudgetChange}
+            floatingLabelText="最小预算"
+            />
+        </div>
+        <div>
+          <TextField
+            value={this.state.maxBudget}
+            onChange={this.maxBudgetChange}
+            floatingLabelText="最大预算"
+            />
+        </div>
+        <div>
+          <TextField
+            value={this.state.location}
+            onChange={this.locationChange}
+            multiLine={true}
+            rows={3}
+            rowsMax={5}
+            floatingLabelText="服务位置"
+            />
+        </div>
+        <div style={baseStyle.btnWrapper}>
+          <RaisedButton
+            label="创建任务"
+            secondary={true}
+            onTouchTap={this.create}
             />
         </div>
       </section>

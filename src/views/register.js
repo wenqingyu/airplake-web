@@ -7,25 +7,9 @@ import request from 'superagent';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 
-import config from '../const/config';
-
-const styles = {
-  register: {
-    marginTop: '10rem'
-  },
-  h1: {
-    fontSize: '2rem'
-  },
-  btn_wrapper: {
-    marginTop: '1rem'
-  },
-  btn: {
-    marginRight: '2rem'
-  }
-}
+import baseStyle from '../assets/styles/base';
+import config from '../consts/config';
 
 class Register extends Component {
 
@@ -35,11 +19,9 @@ class Register extends Component {
     this.emailChange = this.emailChange.bind(this);
     this.register = this.register.bind(this);
     this.backLogin = this.backLogin.bind(this);
-    this.closeDialog = this.closeDialog.bind(this);
 
     this.state = {
       email: '',
-      dialogOpen: false
     }
   }
 
@@ -50,7 +32,7 @@ class Register extends Component {
   }
 
   backLogin() {
-    browserHistory.push('/login');
+    browserHistory.push('login');
   }
 
   register() {
@@ -60,63 +42,56 @@ class Register extends Component {
 
     request
       .post(config.api + '/api/v1/users/verification')
-      .set('Content-Type', 'application/json')
+      .type('json')
       .send(params)
-      .end((err, res) => {
-        console.log(res);
-        if (res.code == 200) {
+      .then((res) => {
+        if (res.status == 200) {
           this.setState({
             dialogOpen: true
+          })
+        } else {
+          this.setState({
+            snackBar: {
+              open: true,
+              message: ret.error_msg
+            }
           });
         }
-      });
-  }
-
-  closeDialog() {
-    this.setState({
-      dialogOpen: false
-    });
+      }, (err) => {
+        this.setState({
+          snackBar: {
+            open: true,
+            message: '你的网络似乎不太好...'
+          }
+        });
+      })
   }
 
   render() {
-    const closeDialogAction = (
-      <FlatButton
-        label="好的"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={this.closeDialog}
-        />
-    );
 
     return (
-      <section style={styles.register}>
-        <Dialog
-          open={this.state.dialogOpen}
-          actions={closeDialogAction}
-          onRequestClose={this.closeDialog}
-          >
-          恭喜您提交成功，请移步至邮箱完成注册。
-        </Dialog>
-
-        <h1 style={styles.h1}>欢迎注册</h1>
+      <section style={baseStyle.wrapper}>
+        <h1 style={baseStyle.title}>欢迎注册</h1>
 
         <div>
           <TextField
             value={this.state.email}
             onChange={this.emailChange}
             floatingLabelText="邮箱"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
-        <div style={styles.btn_wrapper}>
+        <div style={baseStyle.btnWrapper}>
           <RaisedButton
             label="注册"
-            style={styles.btn}
+            style={baseStyle.btn}
             secondary={true}
             onTouchTap={this.register}
             />
           <RaisedButton
             label="返回登录"
-            //href="/login"
+            labelStyle={baseStyle.baseColor}
             onTouchTap={this.backLogin}
             />
         </div>

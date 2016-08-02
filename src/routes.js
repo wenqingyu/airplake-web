@@ -8,7 +8,7 @@ import { Router, Route, IndexRoute, browserHistory} from 'react-router';
 import Index from './views/index';
 import Demand from './views/demand';
 import Login from './views/login';
-import Provider from './views/provider';
+import Vendor from './views/vendor';
 import Register from './views/register';
 
 class Routes extends Component {
@@ -20,7 +20,7 @@ class Routes extends Component {
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
           <Route path="/demand" component={Demand}></Route>
-          <Route path="/provider" component={Provider}></Route>
+          <Route path="/vendor" component={Vendor}></Route>
         </Route>
       </Router>
     );
