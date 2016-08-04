@@ -146,14 +146,6 @@ class Login extends Component {
             floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
-        <div>
-          <DatePicker
-            floatingLabelText="生日"
-            autoOk={true}
-            value={this.state.endDate}
-            onChange={this.endDateChange}
-            />
-        </div>
         <div style={baseStyle.btnWrapper}>
           <RaisedButton
             label="登录"
