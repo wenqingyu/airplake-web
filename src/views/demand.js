@@ -9,14 +9,17 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
+import Snackbar from 'material-ui/Snackbar';
 
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
+import storage from '../utils/storage';
+
 import citys from '../consts/city';
 
 const cityItems = [];
 citys.forEach(cm => {
-  cityItems.push(<MenuItem value={cm.name} key={cm.code} primaryText={`${cm.name}`}/>);
+  cityItems.push(<MenuItem value={cm.val} key={cm.key} primaryText={`${cm.val}`}/>);
 });
 
 class Demand extends Component {
@@ -36,22 +39,34 @@ class Demand extends Component {
 
     this.create = this.create.bind(this);
 
+    this.closeDialog = this.closeDialog.bind(this);
+    this.closeSnackBar = this.closeSnackBar.bind(this);
+
     this.state = {
       title: '',
       description: '',
-      city: '004',
+      city: null,
       serviceType: '',
       startDate: null,
       endDate: null,
       minBudget: '',
       maxBudget: '',
-      location: ''
+      location: '',
+      dialog: {
+        open: false,
+        text: ''
+      },
+      snackBar: {
+        open: false,
+        message: '',
+        autoHideDuration: 1000
+      }
     }
   }
 
   titleChange(event) {
     this.setState({
-      email: event.target.value
+      title: event.target.value
     })
   }
 
@@ -103,6 +118,24 @@ class Demand extends Component {
     });
   }
 
+  closeDialog() {
+    this.setState({
+      dialog: {
+        open: false
+      },
+      registerDisabled: true
+    });
+  }
+
+  closeSnackBar() {
+    this.setState({
+      snackBar: {
+        open: false,
+        message: ''
+      }
+    })
+  }
+
   create() {
     var params = {
       title: this.state.title,
@@ -116,22 +149,52 @@ class Demand extends Component {
       location: this.state.location
     };
 
+    var token = storage.get('token');
+
     request
-      .post('/api/v1/users/verification')
-      .send({
-        email: email,
-        type: userType
-      })
-      .end((err, res) => {
-        if (res.code == 200) {
-          console.log('register success');
+      .post(config.api + '/api/v1/jobs')
+      .type('json')
+      .set('token', token)
+      .send(params)
+      .then((res) => {
+        if (res.status == 200) {
+          let ret = res.body;
+          if (ret.status == 'OK') {
+            this.setState({
+              dialog: {
+                open: true,
+                text: '任务创建成功'
+              }
+            })
+          } else {
+            this.setState({
+              snackBar: {
+                open: true,
+                message: ret.error_msg
+              }
+            });
+          }
         }
+      }, (err) => {
+        this.setState({
+          snackBar: {
+            open: true,
+            message: '你的网络似乎不太好...'
+          }
+        });
       })
   }
 
   render() {
     return (
       <section>
+        <Snackbar
+          open={this.state.snackBar.open}
+          message={this.state.snackBar.message}
+          autoHideDuration={this.state.snackBar.autoHideDuration ? this.state.snackBar.autoHideDuration : 1500}
+          onRequestClose={this.closeSnackBar}
+          />
+
         <h1 style={baseStyle.title}>无人机需求发布</h1>
 
         <div>
@@ -139,6 +202,8 @@ class Demand extends Component {
             value={this.state.title}
             onChange={this.titleChange}
             floatingLabelText="服务标题"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -146,9 +211,12 @@ class Demand extends Component {
             value={this.state.description}
             onChange={this.descriptionChange}
             multiLine={true}
-            rows={3}
+            rows={2}
             rowsMax={5}
             floatingLabelText="服务描述"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelStyle={baseStyle.textareaFloatLabel}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -157,6 +225,8 @@ class Demand extends Component {
             value={this.state.city}
             onChange={this.citySelect}
             floatingLabelText="服务城市"
+            floatingLabelStyle={baseStyle.selectFloatLabel}
+            underlineFocusStyle={baseStyle.inputRequired}
             >
             {cityItems}
           </SelectField>
@@ -166,6 +236,8 @@ class Demand extends Component {
             value={this.state.serviceType}
             onChange={this.serviceTypeChange}
             floatingLabelText="服务类型"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -174,6 +246,8 @@ class Demand extends Component {
             value={this.state.startDate}
             onChange={this.startDateChange}
             floatingLabelText="服务开始日期"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -182,6 +256,8 @@ class Demand extends Component {
             value={this.state.endDate}
             onChange={this.endDateChange}
             floatingLabelText="服务结束日期"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -189,6 +265,8 @@ class Demand extends Component {
             value={this.state.minBudget}
             onChange={this.minBudgetChange}
             floatingLabelText="最小预算"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -196,6 +274,8 @@ class Demand extends Component {
             value={this.state.maxBudget}
             onChange={this.maxBudgetChange}
             floatingLabelText="最大预算"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
@@ -203,9 +283,12 @@ class Demand extends Component {
             value={this.state.location}
             onChange={this.locationChange}
             multiLine={true}
-            rows={3}
+            rows={2}
             rowsMax={5}
             floatingLabelText="服务位置"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelStyle={baseStyle.textareaFloatLabel}
+            floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div style={baseStyle.btnWrapper}>

@@ -63,7 +63,8 @@ class Register extends Component {
   closeSnackBar() {
     this.setState({
       snackBar: {
-        open: false
+        open: false,
+        message: ''
       }
     })
   }

@@ -66,6 +66,7 @@ class Vendor extends Component {
     this.uavCheck = this.uavCheck.bind(this);
     this.cameraCheck = this.cameraCheck.bind(this);
     this.othersCheck = this.othersCheck.bind(this);
+
     this.submit = this.submit.bind(this);
 
     this.closeDialog = this.closeDialog.bind(this);
@@ -227,7 +228,8 @@ class Vendor extends Component {
   closeSnackBar() {
     this.setState({
       snackBar: {
-        open: false
+        open: false,
+        message: ''
       }
     })
   }
@@ -248,12 +250,11 @@ class Vendor extends Component {
     };
 
     var token = storage.get('token');
+
     request
       .post(config.api + '/api/v1/vendors')
-      .set({
-        'Content-Type': 'application/json',
-        'token': token
-      })
+      .type('json')
+      .set('token', token)
       .send({vendor: params})
       .then((res) => {
         if (res.status == 200) {
@@ -433,6 +434,7 @@ class Vendor extends Component {
             rowsMax={5}
             floatingLabelText="团队描述"
             underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelStyle={baseStyle.textareaFloatLabel}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>

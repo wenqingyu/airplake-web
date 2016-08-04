@@ -28,6 +28,9 @@ const baseStyles = {
   },
   selectFloatLabel: {
     left: 0
+  },
+  textareaFloatLabel: {
+    left: 0
   }
 };
 
