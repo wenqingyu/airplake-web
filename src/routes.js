@@ -10,6 +10,7 @@ import Demand from './views/demand';
 import Login from './views/login';
 import Vendor from './views/vendor';
 import Register from './views/register';
+import Profile from './views/profile';
 
 class Routes extends Component {
   render() {
@@ -19,6 +20,7 @@ class Routes extends Component {
           <IndexRoute component={Login}/>
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
+          <Route path="/profile" component={Profile}></Route>
           <Route path="/demand" component={Demand}></Route>
           <Route path="/vendor" component={Vendor}></Route>
         </Route>

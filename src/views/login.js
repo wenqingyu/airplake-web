@@ -7,6 +7,7 @@ import request from 'superagent';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
@@ -19,12 +20,20 @@ class Login extends Component {
 
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
+
     this.login = this.login.bind(this);
     this.register = this.register.bind(this);
+
+    this.closeSnackBar = this.closeSnackBar.bind(this);
 
     this.state = {
       username: '',
       password: '',
+      snackBar: {
+        open: false,
+        message: '',
+        autoHideDuration: 1000
+      }
     }
   }
 
@@ -40,6 +49,14 @@ class Login extends Component {
     })
   }
 
+  closeSnackBar() {
+    this.setState({
+      snackBar: {
+        open: false
+      }
+    })
+  }
+
   login() {
     var params = {
       name: this.state.username,
@@ -52,9 +69,9 @@ class Login extends Component {
       .send(params)
       .then((res) => {
         if (res.status == 200) {
-          storage.set('token', res.header['token']);
           var ret = res.body;
-          if (ret.code == 200) {
+          if (ret.status == 'OK') {
+            storage.set('token', res.header['token']);
             this.setState({
               snackBar: {
                 open: true,
@@ -77,7 +94,7 @@ class Login extends Component {
             this.setState({
               snackBar: {
                 open: true,
-                message: ret.error_msg
+                message: '' + ret.error_msg
               }
             });
           }
@@ -100,6 +117,13 @@ class Login extends Component {
   render() {
     return (
       <section style={baseStyle.wrapper}>
+        <Snackbar
+          open={this.state.snackBar.open}
+          message={this.state.snackBar.message}
+          autoHideDuration={this.state.snackBar.autoHideDuration ? this.state.snackBar.autoHideDuration : 1500}
+          onRequestClose={this.closeSnackBar}
+          />
+
         <h1 style={baseStyle.title}>Welcome!</h1>
 
         <div>
@@ -119,6 +143,14 @@ class Login extends Component {
             floatingLabelText="密码"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
+            />
+        </div>
+        <div>
+          <DatePicker
+            floatingLabelText="生日"
+            autoOk={true}
+            value={this.state.endDate}
+            onChange={this.endDateChange}
             />
         </div>
         <div style={baseStyle.btnWrapper}>

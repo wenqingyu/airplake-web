@@ -4,8 +4,8 @@
 import React, { Component } from 'react';
 import request from 'superagent';
 
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
@@ -33,6 +33,7 @@ class Demand extends Component {
     this.minBudgetChange = this.minBudgetChange.bind(this);
     this.maxBudgetChange = this.maxBudgetChange.bind(this);
     this.locationChange = this.locationChange.bind(this);
+
     this.create = this.create.bind(this);
 
     this.state = {
@@ -169,18 +170,18 @@ class Demand extends Component {
         </div>
         <div>
           <DatePicker
-            floatingLabelText="服务开始时间"
             autoOk={true}
             value={this.state.startDate}
             onChange={this.startDateChange}
+            floatingLabelText="服务开始日期"
             />
         </div>
         <div>
           <DatePicker
-            floatingLabelText="服务结束时间"
             autoOk={true}
             value={this.state.endDate}
             onChange={this.endDateChange}
+            floatingLabelText="服务结束日期"
             />
         </div>
         <div>

@@ -25,6 +25,9 @@ const baseStyles = {
   },
   inputRequired: {
     borderColor: blue400
+  },
+  selectFloatLabel: {
+    left: 0
   }
 };
 
