@@ -236,17 +236,21 @@ class Vendor extends Component {
 
   submit() {
     var params = {
-      teamname: this.state.team,
-      tel: this.state.mobile,
-      certificate: this.state.certificate,
-      city: this.state.city,
-      servicetime: this.state.range,
-      equipment: [
-        {type: '无人机', model: this.state.uav},
-        {type: '相机', model: this.state.camera},
-      ],
-      servicetype: this.state.service,
-      des: this.state.description
+      vendor: {
+        teamname: this.state.team,
+        tel: this.state.mobile,
+        city: this.state.city,
+        servicetime: this.state.range,
+        equipment: [
+          {type: '无人机', model: this.state.uav},
+          {type: '相机', model: this.state.camera},
+        ],
+        servicetype: this.state.service,
+        des: this.state.description
+      },
+      user: {
+        certificate: this.state.certificate
+      }
     };
 
     var token = storage.get('token');
@@ -255,11 +259,12 @@ class Vendor extends Component {
       .post(config.api + '/api/v1/vendors')
       .type('json')
       .set('token', token)
-      .send({vendor: params})
+      .send(params)
       .then((res) => {
         if (res.status == 200) {
           let ret = res.body;
           if (ret.status == 'OK') {
+            storage.set('token', res.header['token']);
             this.setState({
               dialog: {
                 open: true,

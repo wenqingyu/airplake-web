@@ -12,6 +12,8 @@ import Snackbar from 'material-ui/Snackbar';
 
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
+import storage from '../utils/storage';
+import format from '../utils/date-format';
 
 class Profile extends Component {
   constructor(props, context) {
@@ -104,11 +106,12 @@ class Profile extends Component {
   }
 
   submit() {
+    var birthday = format.normal(this.state.birthday);
     var params = {
       user: {
         name: this.state.username,
         password: this.state.password,
-        birthday: this.state.birthday,
+        birthday: birthday,
         tel: this.state.mobile,
         wechat: this.state.wechat,
         city: this.state.city,
@@ -119,13 +122,14 @@ class Profile extends Component {
     var token = this.props.location.query.token;
 
     request
-      .post(config.api + '/api/v1/users/' + token)
+      .put(config.api + '/api/v1/users/' + token)
       .type('json')
       .send(params)
       .then((res) => {
         if (res.status == 200) {
           var ret = res.body;
           if (ret.status == 'OK') {
+            storage.set('token', res.header['token']);
             this.setState({
               snackBar: {
                 open: true,
@@ -195,6 +199,15 @@ class Profile extends Component {
         </div>
         <div>
           <TextField
+            value={this.state.mobile}
+            onChange={this.mobileChange}
+            floatingLabelText="手机号"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
+            />
+        </div>
+        <div>
+          <TextField
             value={this.state.city}
             onChange={this.cityChange}
             floatingLabelText="城市"
@@ -215,7 +228,7 @@ class Profile extends Component {
           <TextField
             value={this.state.wechat}
             onChange={this.wechatChange}
-            floatingLabelText="微信号"
+            floatingLabelText="微信"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />

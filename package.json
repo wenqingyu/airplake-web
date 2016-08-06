@@ -24,7 +24,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "material-ui": "^0.15.2",
+    "material-ui": "^0.15.x",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-router": "^2.6.1",

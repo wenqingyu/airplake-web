@@ -9,11 +9,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
 import storage from '../utils/storage';
+import format from '../utils/date-format';
 
 import citys from '../consts/city';
 
@@ -137,13 +140,15 @@ class Demand extends Component {
   }
 
   create() {
+    var start = format.normal(this.state.startDate);
+    var end = format.normal(this.state.endDate);
     var params = {
       title: this.state.title,
       des: this.state.description,
       city: this.state.city,
       servicetype: this.state.serviceType,
-      starttime: this.state.startDate,
-      endtime: this.state.endDate,
+      starttime: start,
+      endtime: end,
       min: this.state.minBudget,
       max: this.state.maxBudget,
       location: this.state.location
@@ -186,6 +191,15 @@ class Demand extends Component {
   }
 
   render() {
+    const closeDialogAction = (
+      <FlatButton
+        label="OK"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.closeDialog}
+        />
+    );
+
     return (
       <section>
         <Snackbar
@@ -193,6 +207,12 @@ class Demand extends Component {
           message={this.state.snackBar.message}
           autoHideDuration={this.state.snackBar.autoHideDuration ? this.state.snackBar.autoHideDuration : 1500}
           onRequestClose={this.closeSnackBar}
+          />
+        <Dialog
+          open={this.state.dialog.open}
+          actions={closeDialogAction}
+          children={this.state.dialog.text}
+          onRequestClose={this.closeDialog}
           />
 
         <h1 style={baseStyle.title}>无人机需求发布</h1>
@@ -211,8 +231,7 @@ class Demand extends Component {
             value={this.state.description}
             onChange={this.descriptionChange}
             multiLine={true}
-            rows={2}
-            rowsMax={5}
+            rowsMax={4}
             floatingLabelText="服务描述"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelStyle={baseStyle.textareaFloatLabel}
@@ -283,8 +302,7 @@ class Demand extends Component {
             value={this.state.location}
             onChange={this.locationChange}
             multiLine={true}
-            rows={2}
-            rowsMax={5}
+            rowsMax={4}
             floatingLabelText="服务位置"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelStyle={baseStyle.textareaFloatLabel}
@@ -293,7 +311,7 @@ class Demand extends Component {
         </div>
         <div style={baseStyle.btnWrapper}>
           <RaisedButton
-            label="创建任务"
+            label="创建"
             secondary={true}
             onTouchTap={this.create}
             />
