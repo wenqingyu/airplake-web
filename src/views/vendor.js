@@ -249,7 +249,7 @@ class Vendor extends Component {
         des: this.state.description
       },
       user: {
-        certificate: this.state.certificate
+        idCard: this.state.certificate
       }
     };
 

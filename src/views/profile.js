@@ -126,6 +126,7 @@ class Profile extends Component {
       .type('json')
       .send(params)
       .then((res) => {
+        console.log(res);
         if (res.status == 200) {
           var ret = res.body;
           if (ret.status == 'OK') {
@@ -136,7 +137,6 @@ class Profile extends Component {
                 message: '你的AIRPLAKE账号已创建成功'
               }
             });
-            browserHistory.push('home');
           } else {
             this.setState({
               snackBar: {
