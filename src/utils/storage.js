@@ -5,7 +5,7 @@ const storage = {
   prefix: 'airplake-',
   set: (key, val) => {
     key = storage.prefix + key;
-    sessionStorage.setItem(key, JSON.stringify(val));
+    sessionStorage.setItem(key, val);
   },
   get: (key) => {
     key = storage.prefix + key;
