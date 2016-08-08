@@ -72,7 +72,7 @@ class Login extends Component {
         if (res.status == 200) {
           var ret = res.body;
           if (ret.status == 'OK') {
-            storage.set('token', res.header['token']);
+            storage.set('token', res.header['x-token']);
             this.setState({
               snackBar: {
                 open: true,

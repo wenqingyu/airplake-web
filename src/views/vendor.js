@@ -258,13 +258,13 @@ class Vendor extends Component {
     request
       .post(config.api + '/api/v1/vendors')
       .type('json')
-      .set('token', token)
+      .set('x-token', token)
       .send(params)
       .then((res) => {
         if (res.status == 200) {
           let ret = res.body;
           if (ret.status == 'OK') {
-            storage.set('token', res.header['token']);
+            storage.set('token', res.header['x-token']);
             this.setState({
               dialog: {
                 open: true,

@@ -159,7 +159,7 @@ class Demand extends Component {
     request
       .post(config.api + '/api/v1/jobs')
       .type('json')
-      .set('token', token)
+      .set('x-token', token)
       .send(params)
       .then((res) => {
         if (res.status == 200) {
@@ -181,6 +181,7 @@ class Demand extends Component {
           }
         }
       }, (err) => {
+        console.log(err);
         this.setState({
           snackBar: {
             open: true,
