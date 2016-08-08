@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory} from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import Index from './views/index';
 import Demand from './views/demand';
@@ -11,6 +11,7 @@ import Login from './views/login';
 import Vendor from './views/vendor';
 import Register from './views/register';
 import Profile from './views/profile';
+import Home from './views/home';
 
 class Routes extends Component {
   render() {
@@ -18,6 +19,7 @@ class Routes extends Component {
       <Router history={browserHistory}>
         <Route path="/" component={Index}>
           <IndexRoute component={Login}/>
+          <Route path="/home" component={Home}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
           <Route path="/profile" component={Profile}></Route>

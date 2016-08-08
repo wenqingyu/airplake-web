@@ -7,6 +7,9 @@ const baseStyles = {
   baseColor: {
     color: blue400
   },
+  baseBgColor: {
+    backgroundColor: blue400
+  },
   container: {
     textAlign: 'center'
   },

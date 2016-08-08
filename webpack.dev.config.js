@@ -8,7 +8,16 @@ const config = {
     'webpack/hot/only-dev-server',
     path.join(__dirname, '/src/app.js')
   ],
-  devServer: {contentBase: './src', hot: true, inline: true, port: 3000, host: 'localhost'},
+  devServer: {
+    contentBase: './src',
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    progress: true,
+    stats: 'errors-only',
+    port: 3000,
+    host: 'localhost'
+  },
   devtool: 'source-map',
   output: {filename: 'app.js'},
   module: {

@@ -4,8 +4,8 @@
   "description": "Airplake web build with react、material-ui & webpack",
   "main": "./src/index.html",
   "scripts": {
-    "dev": "webpack-dev-server --config webpack.dev.config.js --progress --inline --content-base . --history-api-fallback",
-    "deploy": "rm -rf dist && webpack --config webpack.dep.config.js --progress --hide-modules --colors"
+    "dev": "webpack-dev-server --config webpack.dev.config.js",
+    "deploy": "rm -rf dist && webpack --config webpack.dep.config.js"
   },
   "repository": {
     "type": "git",
