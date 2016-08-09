@@ -13,6 +13,7 @@ import Snackbar from 'material-ui/Snackbar';
 
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
+import validator from '../utils/validator';
 
 class Register extends Component {
 
@@ -28,6 +29,7 @@ class Register extends Component {
 
     this.state = {
       email: '',
+      errEmail: '',
       registerDisabled: false,
       dialog: {
         open: false,
@@ -42,8 +44,15 @@ class Register extends Component {
   }
 
   emailChange(event) {
+    var val = event.target.value;
+    var msg = validator.checkEmail(val);
+    if (msg) {
+      this.setState({errEmail: msg})
+    } else {
+      this.setState({errEmail: ''})
+    }
     this.setState({
-      email: event.target.value
+      email: val
     })
   }
 
@@ -70,6 +79,16 @@ class Register extends Component {
   }
 
   register() {
+    if (this.state.email === '') {
+      this.setState({
+        snackBar: {
+          open: true,
+          message: '邮箱不能为空'
+        }
+      })
+      return;
+    }
+
     var params = {
       email: this.state.email
     }
@@ -137,6 +156,7 @@ class Register extends Component {
         <div>
           <TextField
             value={this.state.email}
+            errorText={this.state.errEmail}
             onChange={this.emailChange}
             floatingLabelText="邮箱"
             underlineFocusStyle={baseStyle.inputRequired}

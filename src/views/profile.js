@@ -14,6 +14,7 @@ import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
 import storage from '../utils/storage';
 import format from '../utils/date-format';
+import validator from '../utils/validator';
 
 class Profile extends Component {
   constructor(props, context) {
@@ -26,20 +27,25 @@ class Profile extends Component {
     this.birthdayChange = this.birthdayChange.bind(this);
     this.mobileChange = this.mobileChange.bind(this);
     this.wechatChange = this.wechatChange.bind(this);
-    this.certificateChange = this.certificateChange.bind(this);
+    this.idCardChange = this.idCardChange.bind(this);
 
     this.submit = this.submit.bind(this);
     this.closeSnackBar = this.closeSnackBar.bind(this);
 
     this.state = {
       username: '',
+      errUsername: '',
       password: '',
       rePassword: '',
       city: '',
+      errCity: '',
       birthday: null,
       mobile: '',
+      errMobile: '',
       wechat: '',
-      certificate: '',
+      errWechat: '',
+      idCard: '',
+      errIdCard: '',
       snackBar: {
         open: false,
         message: '',
@@ -49,8 +55,15 @@ class Profile extends Component {
   }
 
   usernameChange(event) {
+    var val = event.target.value;
+    var msg = validator.checkUsername(val);
+    if (msg) {
+      this.setState({errUsername: msg})
+    } else {
+      this.setState({errUsername: ''})
+    }
     this.setState({
-      username: event.target.value
+      username: val
     })
   }
 
@@ -67,8 +80,15 @@ class Profile extends Component {
   }
 
   cityChange(event) {
+    var val = event.target.value;
+    var msg = validator.checkChinese(val);
+    if (msg) {
+      this.setState({errCity: msg})
+    } else {
+      this.setState({errCity: ''})
+    }
     this.setState({
-      city: event.target.value
+      city: val
     })
   }
 
@@ -79,20 +99,41 @@ class Profile extends Component {
   }
 
   mobileChange(event) {
+    var val = event.target.value;
+    var msg = validator.checkMobile(val);
+    if (msg) {
+      this.setState({errMobile: msg})
+    } else {
+      this.setState({errMobile: ''})
+    }
     this.setState({
-      mobile: event.target.value
+      mobile: val
     })
   }
 
   wechatChange(event) {
+    var val = event.target.value;
+    var msg = validator.checkWechat(val);
+    if (msg) {
+      this.setState({errWechat: msg})
+    } else {
+      this.setState({errWechat: ''})
+    }
     this.setState({
-      wechat: event.target.value
+      wechat: val
     })
   }
 
-  certificateChange(event) {
+  idCardChange(event) {
+    var val = event.target.value;
+    var msg = validator.checkIdCard(val);
+    if (msg) {
+      this.setState({errIdCard: msg})
+    } else {
+      this.setState({errIdCard: ''})
+    }
     this.setState({
-      certificate: event.target.value
+      idCard: val
     })
   }
 
@@ -106,6 +147,43 @@ class Profile extends Component {
   }
 
   submit() {
+    if (this.state.username === '') {
+      this.setState({
+        snackBar: {
+          open: true,
+          message: '用户名不能为空'
+        }
+      })
+      return;
+    }
+    if (this.state.password === '' || this.state.rePassword === '') {
+      this.setState({
+        snackBar: {
+          open: true,
+          message: '密码不能为空'
+        }
+      })
+      return;
+    }
+    if (this.state.password != this.state.rePassword) {
+      this.setState({
+        snackBar: {
+          open: true,
+          message: '两次输入的密码不一致'
+        }
+      })
+      return;
+    }
+    if (this.state.city === '') {
+      this.setState({
+        snackBar: {
+          open: true,
+          message: '城市不能为空'
+        }
+      })
+      return;
+    }
+
     var birthday = format.normal(this.state.birthday);
     var params = {
       user: {
@@ -115,7 +193,7 @@ class Profile extends Component {
         tel: this.state.mobile,
         wechat: this.state.wechat,
         city: this.state.city,
-        idCard: this.state.certificate
+        idCard: this.state.idCard
       }
     }
 
@@ -170,8 +248,9 @@ class Profile extends Component {
         <div>
           <TextField
             value={this.state.username}
+            errorText={this.state.errUsername}
             onChange={this.usernameChange}
-            floatingLabelText="用户名"
+            floatingLabelText="用户名（必填）"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />
@@ -181,7 +260,7 @@ class Profile extends Component {
             value={this.state.password}
             onChange={this.passwordChange}
             type="password"
-            floatingLabelText="密码"
+            floatingLabelText="密码（必填）"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />
@@ -191,16 +270,7 @@ class Profile extends Component {
             value={this.state.rePassword}
             onChange={this.rePasswordChange}
             type="password"
-            floatingLabelText="再次输入密码"
-            underlineFocusStyle={baseStyle.inputRequired}
-            floatingLabelFocusStyle={baseStyle.baseColor}
-            />
-        </div>
-        <div>
-          <TextField
-            value={this.state.mobile}
-            onChange={this.mobileChange}
-            floatingLabelText="手机号"
+            floatingLabelText="再次输入密码（必填）"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />
@@ -208,8 +278,19 @@ class Profile extends Component {
         <div>
           <TextField
             value={this.state.city}
+            errorText={this.state.errCity}
             onChange={this.cityChange}
-            floatingLabelText="城市"
+            floatingLabelText="城市（必填）"
+            underlineFocusStyle={baseStyle.inputRequired}
+            floatingLabelFocusStyle={baseStyle.baseColor}
+            />
+        </div>
+        <div>
+          <TextField
+            value={this.state.mobile}
+            errorText={this.state.errMobile}
+            onChange={this.mobileChange}
+            floatingLabelText="手机号"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />
@@ -226,17 +307,19 @@ class Profile extends Component {
         <div>
           <TextField
             value={this.state.wechat}
+            errorText={this.state.errWechat}
             onChange={this.wechatChange}
-            floatingLabelText="微信"
+            floatingLabelText="微信号"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />
         </div>
         <div>
           <TextField
-            value={this.state.certificate}
-            onChange={this.certificateChange}
-            floatingLabelText="身份证"
+            value={this.state.idCard}
+            errorText={this.state.errIdCard}
+            onChange={this.idCardChange}
+            floatingLabelText="身份证号"
             underlineFocusStyle={baseStyle.inputRequired}
             floatingLabelFocusStyle={baseStyle.baseColor}
             />

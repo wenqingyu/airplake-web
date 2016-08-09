@@ -12,6 +12,7 @@ import Snackbar from 'material-ui/Snackbar';
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
 import storage from '../utils/storage';
+import validator from '../utils/validator';
 
 class Login extends Component {
 
@@ -28,6 +29,7 @@ class Login extends Component {
 
     this.state = {
       username: '',
+      errUsername: '',
       password: '',
       snackBar: {
         open: false,
@@ -38,8 +40,15 @@ class Login extends Component {
   }
 
   usernameChange(event) {
+    var val = event.target.value;
+    var msg = validator.checkUsername(val);
+    if (msg) {
+      this.setState({errUsername: msg})
+    } else {
+      this.setState({errUsername: ''})
+    }
     this.setState({
-      username: event.target.value
+      username: val
     })
   }
 
@@ -59,6 +68,16 @@ class Login extends Component {
   }
 
   login() {
+    if (this.state.username === '' || this.state.password === '') {
+      this.setState({
+        snackBar: {
+          open: true,
+          message: '用户名和密码不能为空'
+        }
+      })
+      return;
+    }
+
     var params = {
       name: this.state.username,
       password: this.state.password
@@ -125,11 +144,10 @@ class Login extends Component {
           onRequestClose={this.closeSnackBar}
           />
 
-        <h1 style={baseStyle.title}>Welcome!</h1>
-
         <div>
           <TextField
             value={this.state.username}
+            errorText={this.state.errUsername}
             onChange={this.usernameChange}
             floatingLabelText="用户名"
             underlineFocusStyle={baseStyle.inputRequired}
