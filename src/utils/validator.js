@@ -36,23 +36,31 @@ const validator = {
 
 export default validator;
 
-//var stgs = {
-//  isEmpty: (val, msg) => {
-//    if (val === '') return msg;
-//  },
-//  minLength: (val, len, msg) => {
-//    if (val.length > len) return msg;
-//  },
-//  isMobile: (val, msg) => {
-//    var reg = /^1[3|5|7|8][0-9]{9}$/;
-//    if (!reg.test(val)) return msg;
-//  },
-//  username: (val, msg) => {
-//    var reg = /^\w\w+$/;
-//    if(!reg.test(val)) return msg;
-//  }
-//}
-//
+// var stgs = {
+//   isEmpty: (val, msg) => {
+//     if (val === '') return msg;
+//   },
+//   minLength: (val, len, msg) => {
+//     if (val.length > len) return msg;
+//   },
+//   isMobile: (val, msg) => {
+//     var reg = /^1[3|5|7|8][0-9]{9}$/;
+//     if (!reg.test(val)) return msg;
+//   },
+//   isEmail: (val ,msg) => {
+//     var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+//     if (!reg.test(val)) return msg;
+//   },
+//   isChinese: (val, msg) => {
+//     var reg = /^[\u4e00-\u9fa5]+$/;
+//     if (!reg.test(val)) return msg;
+//   },
+//   username: (val, msg) => {
+//     var reg = /^\w\w{5,19}$/;
+//     if(!reg.test(val)) return msg;
+//   }
+// }
+
 //var Validator = function() {
 //  this.cache = [];
 //}

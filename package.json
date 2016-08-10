@@ -4,8 +4,8 @@
   "description": "Airplake web build with react、material-ui & webpack",
   "main": "./src/index.html",
   "scripts": {
-    "dev": "webpack-dev-server --config webpack.dev.config.js",
-    "deploy": "rm -rf dist && webpack --config webpack.dep.config.js"
+    "dev": "webpack-dev-server",
+    "dep": "webpack"
   },
   "repository": {
     "type": "git",
@@ -36,10 +36,13 @@
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
+    "clean-webpack-plugin": "^0.1.10",
     "html-webpack-plugin": "^2.22.0",
+    "open-browser-webpack-plugin": "^0.0.2",
     "react-hot-loader": "^1.3.0",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-merge": "^0.14.1"
   },
   "bugs": {
     "url": "https://github.com/wenqingyu/airplake-frontend-angular/issues"

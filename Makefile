@@ -1,8 +1,8 @@
-dep: install
-	npm run deploy
+dep: in
+	npm run dep
 
-install:
+in:
 	npm install --registry=http://registry.npm.taobao.org
 
-dev: install
+dev: in
 	npm run dev
