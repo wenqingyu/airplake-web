@@ -7,12 +7,13 @@ import request from 'superagent';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
 
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
 import storage from '../utils/storage';
 import validator from '../utils/validator';
+
+import emmiter from '../utils/emmiter';
 
 class Login extends Component {
 
@@ -25,17 +26,10 @@ class Login extends Component {
     this.login = this.login.bind(this);
     this.register = this.register.bind(this);
 
-    this.closeSnackBar = this.closeSnackBar.bind(this);
-
     this.state = {
       username: '',
       errUsername: '',
-      password: '',
-      snackBar: {
-        open: false,
-        message: '',
-        autoHideDuration: 1000
-      }
+      password: ''
     }
   }
 
@@ -58,23 +52,9 @@ class Login extends Component {
     })
   }
 
-  closeSnackBar() {
-    this.setState({
-      snackBar: {
-        open: false,
-        message: ''
-      }
-    })
-  }
-
   login() {
     if (this.state.username === '' || this.state.password === '') {
-      this.setState({
-        snackBar: {
-          open: true,
-          message: '用户名和密码不能为空'
-        }
-      })
+      emmiter.publish('openSnackbar', '用户名和密码不能为空');
       return;
     }
 
@@ -92,40 +72,20 @@ class Login extends Component {
           var ret = res.body;
           if (ret.status == 'OK') {
             storage.set('token', res.header['x-token']);
-            this.setState({
-              snackBar: {
-                open: true,
-                message: '登录成功'
-              }
-            });
+            emmiter.publish('openSnackbar', '登录成功');
             if (ret.data.type == 1) {
               browserHistory.push('vendor');
             } else if (ret.data.type == 2) {
               browserHistory.push('demand');
             } else {
-              this.setState({
-                snackBar: {
-                  open: true,
-                  message: '你究竟是谁？...'
-                }
-              });
+              emmiter.publish('openSnackbar', '你究竟是谁？...');
             }
           } else {
-            this.setState({
-              snackBar: {
-                open: true,
-                message: '' + ret.error_msg
-              }
-            });
+            emmiter.publish('openSnackbar', ret.error_msg);
           }
         }
       }, (err) => {
-        this.setState({
-          snackBar: {
-            open: true,
-            message: '你的网络似乎不太好...'
-          }
-        });
+        emmiter.publish('openSnackbar', '网络开小差了...');
       })
   }
 
@@ -137,13 +97,6 @@ class Login extends Component {
   render() {
     return (
       <section style={baseStyle.wrapper}>
-        <Snackbar
-          open={this.state.snackBar.open}
-          message={this.state.snackBar.message}
-          autoHideDuration={this.state.snackBar.autoHideDuration ? this.state.snackBar.autoHideDuration : 1500}
-          onRequestClose={this.closeSnackBar}
-          />
-
         <div>
           <TextField
             value={this.state.username}

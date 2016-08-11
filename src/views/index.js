@@ -8,6 +8,9 @@ import { blue400 } from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+import AirDialog from '../kits/dialog';
+import AirSnackBar from '../kits/snack-bar';
+
 import baseStyle from '../assets/styles/base';
 
 const muiTheme = getMuiTheme({
@@ -25,6 +28,8 @@ class Index extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <section style={baseStyle.container}>
+          <AirDialog />
+          <AirSnackBar />
           {this.props.children}
         </section>
       </MuiThemeProvider>

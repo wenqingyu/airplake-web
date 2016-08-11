@@ -7,6 +7,8 @@ import { render } from 'react-dom';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
+import emmiter from '../utils/emmiter';
+
 class AirDialog extends Component {
   constructor(props, context) {
     super(props, context);
@@ -31,11 +33,22 @@ class AirDialog extends Component {
         label="OK"
         primary={true}
         keyboardFocused={true}
-        onTouchTap={this.closeDialog}
+        onTouchTap={this.close}
         />
     );
 
-    return (
+    emmiter.subscribe('openDialog', (msg) => {
+      this.setState({
+        open: true,
+        text: msg
+      })
+    });
+
+    emmiter.subscribe('closeDialog', (msg) => {
+      this.close();
+    });
+
+    return(
       <Dialog
         open={this.state.open}
         actions={closeAction}

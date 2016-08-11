@@ -13,7 +13,7 @@ import Snackbar from 'material-ui/Snackbar';
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
 import storage from '../utils/storage';
-import format from '../utils/date-format';
+import format from '../utils/format';
 import validator from '../utils/validator';
 
 class Profile extends Component {

@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Snackbar from 'material-ui/Snackbar';
 
+import emmiter from '../utils/emmiter';
+
 class AirSnackBar extends Component {
   constructor(props, context) {
     super(props, context);
@@ -17,6 +19,13 @@ class AirSnackBar extends Component {
   }
 
   render() {
+    emmiter.subscribe('openSnackbar', (msg) => {
+      this.setState({
+        open: true,
+        message: msg
+      })
+    });
+
     return (
       <Snackbar
         open={this.state.open}

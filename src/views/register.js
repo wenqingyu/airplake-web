@@ -7,13 +7,12 @@ import request from 'superagent';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import Snackbar from 'material-ui/Snackbar';
 
 import baseStyle from '../assets/styles/base';
 import config from '../consts/config';
 import validator from '../utils/validator';
+
+import emmiter from '../utils/emmiter';
 
 class Register extends Component {
 
@@ -24,22 +23,10 @@ class Register extends Component {
     this.register = this.register.bind(this);
     this.backLogin = this.backLogin.bind(this);
 
-    this.closeDialog = this.closeDialog.bind(this);
-    this.closeSnackBar = this.closeSnackBar.bind(this);
-
     this.state = {
       email: '',
       errEmail: '',
       registerDisabled: false,
-      dialog: {
-        open: false,
-        text: ''
-      },
-      snackBar: {
-        open: false,
-        message: '',
-        autoHideDuration: 1000
-      }
     }
   }
 
@@ -60,32 +47,9 @@ class Register extends Component {
     browserHistory.push('login');
   }
 
-  closeDialog() {
-    this.setState({
-      dialog: {
-        open: false
-      },
-      registerDisabled: true
-    });
-  }
-
-  closeSnackBar() {
-    this.setState({
-      snackBar: {
-        open: false,
-        message: ''
-      }
-    })
-  }
-
   register() {
     if (this.state.email === '') {
-      this.setState({
-        snackBar: {
-          open: true,
-          message: '邮箱不能为空'
-        }
-      })
+      emmiter.publish('openSnackbar', '邮箱不能为空');
       return;
     }
 
@@ -101,58 +65,19 @@ class Register extends Component {
         if (res.status == 200) {
           let ret = res.body;
           if (ret.status == 'OK') {
-            this.setState({
-              dialog: {
-                open: true,
-                text: '提交成功，请移步邮箱完成注册。'
-              }
-            })
+            emmiter.publish('openDialog', '提交成功，请移步邮箱完成注册。');
           } else {
-            this.setState({
-              snackBar: {
-                open: true,
-                message: ret.error_msg
-              }
-            });
+            emmiter.publish('openSnackbar', ret.error_msg);
           }
         }
       }, (err) => {
-        this.setState({
-          snackBar: {
-            open: true,
-            message: '网络开小差了...'
-          }
-        });
+        emmiter.publish('openSnackbar', '网络开小差了...');
       })
   }
 
   render() {
-    const closeDialogAction = (
-      <FlatButton
-        label="OK"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={this.closeDialog}
-        />
-    );
-
     return (
       <section style={baseStyle.wrapper}>
-        <Snackbar
-          open={this.state.snackBar.open}
-          message={this.state.snackBar.message}
-          autoHideDuration={this.state.snackBar.autoHideDuration ? this.state.snackBar.autoHideDuration : 1500}
-          onRequestClose={this.closeSnackBar}
-          />
-        <Dialog
-          open={this.state.dialog.open}
-          actions={closeDialogAction}
-          children={this.state.dialog.text}
-          onRequestClose={this.closeDialog}
-          />
-
-        <h1 style={baseStyle.title}>欢迎注册</h1>
-
         <div>
           <TextField
             value={this.state.email}
